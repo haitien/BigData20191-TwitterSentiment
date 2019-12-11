@@ -1,0 +1,35 @@
+1. Start zookeeper
+bin/zookeeper-server-start.sh config/zookeeper.properties
+
+2. Start kafka
+bin/kafka-server-start.sh config/server.properties
+
+3. Create topic
+bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test
+
+4. Show list topics
+bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+
+5. Start producer
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+This is a message
+
+6. Start consumer
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+
+7. Submit jobs
+bin/spark-submit --jars spark-streaming-kafka-0-8-assembly_2.11-2.4.4.jar /home/haitien/Desktop/TwitterSentimentAnalysis_BigData20191/demo_kafka.py localhost:9092 test
+
+bin/spark-submit --jars spark-streaming-kafka-0-8-assembly_2.11-2.4.4.jar examples/src/main/python/streaming/kafka_wordcount.py localhost:2181 test
+
+8. Install mmlspark
+pyspark --packages com.microsoft.ml.spark:mmlspark_2.11:0.5 --repositories=https://mmlspark.azureedge.net/maven
+
+9. Run netcat server
+nc -lk 9999
+
+10. 
+bin/spark-submit examples/src/main/python/streaming/network_wordcount.py localhost 9999
+
+11.
+bin/spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.0.2  /home/haitien/Desktop/TwitterSentimentAnalysis_BigData20191/demo_kafka.py
