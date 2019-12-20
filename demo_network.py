@@ -9,10 +9,22 @@ from pyspark.ml import PipelineModel
 from pyspark.sql import SparkSession
 
 if __name__ == "__main__":
-  spark = SparkSession.builder \
-    .appName("StructuredNetworkWordCount") \
+  # spark = SparkSession.builder \
+  #   .appName("StructuredNetworkWordCount") \
+  #   .getOrCreate()
+
+  spark = SparkSession.builder.appName("twitter-sentiment-demo") \
+    .config("spark.jars.packages",
+            "com.microsoft.ml.spark:mmlspark_2.11:1.0.0-rc1") \
+    .config('spark.executor.memory', '8g') \
     .getOrCreate()
 
+  try:
+    from mmlspark.vw import VowpalWabbitClassifier
+    from mmlspark.train import ComputeModelStatistics
+  except Exception as ex:
+    print(ex)
+  
   lines = spark.readStream \
     .format("socket") \
     .option("host", "localhost") \
@@ -21,7 +33,9 @@ if __name__ == "__main__":
 
   lines = lines.withColumnRenamed("value", "text")
   lines.printSchema()
-  model = PipelineModel.read().load("/home/haitien/Desktop/TwitterSentimentAnalysis_BigData20191/scripts/saved_model/model")
+  model = PipelineModel.read().load(
+      "/home/haitien/Desktop/TwitterSentimentAnalysis_BigData20191/scripts"
+      "/saved_model/model4")
   prediction = model.transform(lines)
   selected = prediction.select("text", "probability", "prediction")
   query = selected.writeStream \
