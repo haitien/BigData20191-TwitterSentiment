@@ -19,3 +19,8 @@ nc -lk 9999
 
 rồi thực hiện nhập text thông qua server. Bên phía client demo_network.py sẽ hiển thị kết quả dự đoán ngữ nghiax câu
  text ở output.
+ 
+ + scripts/saved_model/model: model chưa được xử lý data -> kết quả khá thấp, acc=65%
+ + scripts/saved_model/model4: model sử dụng Vowpal Wabbit Classifier của mllspark (một framework của Microsoft) kết
+  quả cao nhất > 85%.
+ + scripts/saved_model/model1_final: model của bài báo cáo có xử lý dữ liệu: > 76%
